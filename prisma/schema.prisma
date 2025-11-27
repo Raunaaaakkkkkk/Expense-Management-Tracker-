@@ -1,0 +1,220 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id                        String     @id @default(cuid())
+  name                      String
+  slug                      String     @unique
+  brandColor                String?
+  defaultCurrency           String     @default("INR")
+  timezone                  String     @default("UTC")
+  fiscalYearStart           Int        @default(1)
+  contactEmail              String?
+  address                   String?
+  phone                     String?
+  website                   String?
+  taxId                     String?
+  businessRegistrationNumber String?
+  logoUrl                   String?
+  description               String?
+  autoApprovalLimit         Decimal?
+  receiptRequiredThreshold  Decimal?
+  defaultMileageRate        Decimal?
+  enableTaxCalculation      Boolean    @default(false)
+  expenseSubmissionDeadline Int?
+  enableEmailNotifications  Boolean    @default(true)
+  dateFormat                String     @default("DD/MM/YYYY")
+  numberFormat              String     @default("en-IN")
+  createdAt                 DateTime   @default(now())
+  updatedAt                 DateTime   @updatedAt
+  logs                      AuditLog[]
+  budgets                   Budget[]
+  categories                Category[]
+  expenses                  Expense[]
+  policies                  Policy[]
+  stores                    Store[]
+  users                     User[]
+  notifications             Notification[]
+}
+
+model Store {
+  id                String       @id @default(cuid())
+  name              String
+  address           String?
+  type              String?
+  numberOfEmployees Int?
+  organizationId    String
+  expenses          Expense[]
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                    String       @id @default(cuid())
+  email                 String       @unique
+  name                  String?
+  image                 String?
+  passwordHash          String?
+  role                  Role         @default(EMPLOYEE)
+  canViewTeamPage       Boolean      @default(false)
+  canViewApprovalPage   Boolean      @default(false)
+  canManageTeamExpenses Boolean      @default(false)
+  canViewReports        Boolean      @default(false)
+  canManagePolicies     Boolean      @default(false)
+  canManageStores       Boolean      @default(false)
+  organizationId        String
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  accounts              Account[]
+  logs                  AuditLog[]
+  expenses              Expense[]
+  approved              Expense[]    @relation("ApprovedBy")
+  sessions              Session[]
+  sentNotifications     Notification[] @relation("SentNotifications")
+  receivedNotifications Notification[] @relation("ReceivedNotifications")
+  organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id             String       @id @default(cuid())
+  name           String
+  organizationId String
+  budgets        Budget[]
+  policies       Policy[]
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  expenses       Expense[]
+}
+
+model Expense {
+  id             String        @id @default(cuid())
+  title          String
+  amount         Decimal
+  currency       String        @default("INR")
+  date           DateTime      @default(now())
+  notes          String?
+  status         ExpenseStatus @default(PENDING)
+  receiptUrl     String?
+  approvedById   String?
+  approvedAt     DateTime?
+  rejectedReason String?
+  userId         String
+  organizationId String
+  storeId        String?
+  categoryId     String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  category       Category?     @relation(fields: [categoryId], references: [id])
+  store          Store?        @relation(fields: [storeId], references: [id])
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approvedBy     User?         @relation("ApprovedBy", fields: [approvedById], references: [id])
+
+  @@index([organizationId, status])
+}
+
+model Policy {
+  id             String       @id @default(cuid())
+  name           String
+  maxAmount      Decimal?
+  perExpense     Boolean      @default(true)
+  monthlyLimit   Decimal?
+  appliesToRole  Role?
+  categoryId     String?
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  category       Category?    @relation(fields: [categoryId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model Budget {
+  id             String       @id @default(cuid())
+  name           String
+  period         String
+  amount         Decimal
+  spent          Decimal      @default(0)
+  categoryId     String?
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  category       Category?    @relation(fields: [categoryId], references: [id])
+}
+
+model AuditLog {
+  id             String       @id @default(cuid())
+  action         String
+  actorId        String?
+  organizationId String
+  target         String?
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actor          User?        @relation(fields: [actorId], references: [id])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Notification {
+  id             String       @id @default(cuid())
+  message        String
+  senderId       String
+  recipientId    String
+  organizationId String
+  createdAt      DateTime     @default(now())
+  sender         User         @relation("SentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient      User         @relation("ReceivedNotifications", fields: [recipientId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  EMPLOYEE
+  ACCOUNTANT
+}
+
+enum ExpenseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REIMBURSED
+}
