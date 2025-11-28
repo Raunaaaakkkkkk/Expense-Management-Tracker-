@@ -1,6 +1,6 @@
 # Expense Management Tracker
 
-A comprehensive expense management system built with Next.js, designed to streamline corporate expense tracking, approval workflows, and financial reporting.
+A comprehensive expense management system built with Java Servlets, JSP, MySQL, JDBC, HTML5, CSS3, and JavaScript, designed to streamline corporate expense tracking, approval workflows, and financial reporting.
 
 ## 🚀 Features
 
@@ -19,27 +19,30 @@ A comprehensive expense management system built with Next.js, designed to stream
 - **Employee**: Expense submission and personal expense tracking
 
 ### Technical Features
-- **Secure Authentication**: NextAuth.js integration with role-based access control
-- **Database**: SQLite with Prisma ORM for reliable data management
-- **Modern UI**: Responsive design with Tailwind CSS and shadcn/ui components
+- **Secure Authentication**: Session-based authentication with role-based access control
+- **Database**: MySQL with JDBC for reliable data management
+- **Modern UI**: Responsive design with Bootstrap CSS and Font Awesome icons
 - **Real-time Updates**: Live notifications and status updates
 - **File Uploads**: Receipt and document attachment support
-- **Data Visualization**: Interactive charts using Recharts
+- **Data Visualization**: Interactive charts using Chart.js
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui components
-- **Database**: SQLite with Prisma ORM
-- **Authentication**: NextAuth.js
-- **Charts**: Recharts
-- **Forms**: React Hook Form with Zod validation
-- **Deployment**: Vercel-ready
+- **Backend**: Java Servlets, JSP
+- **Database**: MySQL with JDBC
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Server**: Apache Tomcat
+- **Build Tool**: Maven
+- **UI Framework**: Bootstrap 5
+- **Icons**: Font Awesome
+- **Charts**: Chart.js
 
 ## 📋 Prerequisites
 
-- Node.js 18+
-- npm or yarn
+- Java 11+
+- Apache Tomcat 9+
+- MySQL 8.0+
+- Maven 3.6+
 
 ## 🚀 Getting Started
 
@@ -49,42 +52,40 @@ A comprehensive expense management system built with Next.js, designed to stream
    cd expense-mgmt
    ```
 
-2. **Install dependencies**
+2. **Set up MySQL database**
+   ```sql
+   CREATE DATABASE expense_mgmt;
+   -- Run the SQL script from src/main/resources/schema.sql
+   ```
+
+3. **Configure database connection**
+   Create a context.xml file in Tomcat's conf directory or update the DatabaseConnection.java file with your MySQL credentials.
+
+4. **Build the project**
    ```bash
-   npm install
+   mvn clean compile
    ```
 
-3. **Set up the database**
+5. **Package the application**
    ```bash
-   # Generate Prisma client
-   npm run prisma:generate
-
-   # Push database schema
-   npm run db:push
-
-   # Seed with demo data
-   npm run db:seed
+   mvn clean package
    ```
 
-4. **Configure environment variables**
-   Create a `.env` file in the root directory:
-   ```env
-   DATABASE_URL="file:./prisma/dev.db"
-   NEXTAUTH_SECRET="your-secret-key"
-   NEXTAUTH_URL="http://localhost:3000"
-   ```
+6. **Deploy to Tomcat**
+   - Copy the generated WAR file from target/ to Tomcat's webapps directory
+   - Or use Tomcat Manager to deploy the WAR file
 
-5. **Start the development server**
+7. **Start Tomcat**
    ```bash
-   npm run dev
+   # Start Tomcat server
    ```
 
-6. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+8. **Open your browser**
+   Navigate to [http://localhost:8080/expense-management-tracker](http://localhost:8080/expense-management-tracker)
 
 ## 👤 Demo Accounts
 
-After seeding, you can log in with these demo accounts:
+After setting up the database with demo data:
 
 - **Admin**: `admin@demo.local` / `demo123`
 - **Manager**: `manager@demo.local` / `demo123`
@@ -95,45 +96,44 @@ After seeding, you can log in with these demo accounts:
 
 ```
 expense-mgmt/
-├── prisma/
-│   ├── schema.prisma          # Database schema
-│   ├── seed.cjs              # Database seeding script
-│   └── migrations/           # Database migrations
 ├── src/
-│   ├── app/                  # Next.js app router pages
-│   │   ├── api/              # API routes
-│   │   ├── dashboard/        # Dashboard page
-│   │   ├── expenses/         # Expense management
-│   │   ├── teams/            # Team management
-│   │   └── ...
-│   ├── components/           # Reusable UI components
-│   ├── lib/                  # Utility functions and configurations
-│   └── types/                # TypeScript type definitions
-├── public/                   # Static assets
-└── package.json
+│   ├── main/
+│   │   ├── java/com/expensemgmt/
+│   │   │   ├── dao/              # Data Access Objects
+│   │   │   ├── model/            # Model classes
+│   │   │   ├── servlet/          # Servlet controllers
+│   │   │   └── util/             # Utility classes
+│   │   ├── resources/
+│   │   │   └── schema.sql        # Database schema
+│   │   └── webapp/
+│   │       ├── WEB-INF/
+│   │       │   ├── jsp/          # JSP pages
+│   │       │   └── web.xml       # Web configuration
+│   │       └── index.jsp         # Welcome page
+│   └── test/                     # Unit tests
+├── pom.xml                       # Maven configuration
+└── README.md
 ```
 
 ## 🔧 Available Scripts
 
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run prisma:generate` - Generate Prisma client
-- `npm run db:push` - Push database schema changes
-- `npm run db:seed` - Seed database with demo data
+- `mvn clean compile` - Compile the project
+- `mvn clean package` - Build WAR file
+- `mvn clean test` - Run unit tests
+- `mvn tomcat7:run` - Run with Tomcat plugin (requires configuration)
 
 ## 🌐 Deployment
 
-### Vercel (Recommended)
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy!
+### Apache Tomcat
+1. Build the WAR file: `mvn clean package`
+2. Copy target/expense-management-tracker.war to Tomcat's webapps directory
+3. Start Tomcat server
+4. Access at http://localhost:8080/expense-management-tracker
 
 ### Manual Deployment
-1. Build the application: `npm run build`
-2. Start the production server: `npm run start`
+1. Build the WAR file: `mvn clean package`
+2. Use Tomcat Manager or deploy manually
+3. Configure database connection in context.xml
 
 ## 🤝 Contributing
 
@@ -155,6 +155,18 @@ For support or questions, please create an issue in the GitHub repository.
 
 Keep your dependencies updated:
 ```bash
-npm update
-npm run prisma:generate  # If Prisma schema changed
+mvn versions:display-dependency-updates
+mvn versions:use-latest-versions
 ```
+
+## 📊 Database Schema
+
+The application uses MySQL with the following main tables:
+- `organization` - Organization/company information
+- `user` - User accounts and roles
+- `expense` - Expense records
+- `category` - Expense categories
+- `store` - Store/location information
+- `policy` - Spending policies
+- `budget` - Budget allocations
+- `audit_log` - System audit trail
