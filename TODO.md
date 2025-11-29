@@ -52,5 +52,5 @@ Migrate the existing Next.js expense management application to a Java-based web 
 
 ### 8. Documentation
 - [x] Update README.md with new setup instructions
-- [ ] Document database schema and API endpoints
-- [ ] Create deployment guide
+- [x] Document database schema and API endpoints
+- [x] Create deployment guide

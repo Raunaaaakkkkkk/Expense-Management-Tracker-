@@ -1,6 +1,6 @@
 # Expense Management Tracker
 
-A modern, full-stack expense management system combining a React-based frontend with a Spring Boot backend, designed to streamline corporate expense tracking, approval workflows, and financial reporting.
+A Java web application for corporate expense management using Servlets, JSP, MySQL, JDBC, and Apache Tomcat, designed to streamline expense tracking, approval workflows, and financial reporting.
 
 ## 🚀 Features
 
@@ -8,7 +8,7 @@ A modern, full-stack expense management system combining a React-based frontend 
 - **Expense Submission & Tracking**: Submit expenses with receipts, categories, and detailed information
 - **Multi-level Approval Workflow**: Configurable approval processes with different user roles
 - **Team Management**: Add and manage team members with role-based permissions
-- **Real-time Dashboard**: Interactive charts and analytics for expense insights
+- **Dashboard**: Interactive charts and analytics for expense insights
 - **Policy Management**: Define and enforce spending policies and limits
 - **Reports & Analytics**: Generate comprehensive expense reports and export data
 
@@ -19,100 +19,102 @@ A modern, full-stack expense management system combining a React-based frontend 
 - **Employee**: Expense submission and personal expense tracking
 
 ### Technical Features
-- **Secure Authentication**: NextAuth.js with session management and role-based access control
-- **Database**: SQLite with Prisma ORM for reliable data management
-- **Modern UI**: Responsive design with Tailwind CSS and shadcn/ui components
-- **Real-time Updates**: Live notifications and status updates
+- **Secure Authentication**: Session-based authentication with role-based access control
+- **Database**: MySQL with JDBC for reliable data management
+- **Modern UI**: Responsive design with HTML5, CSS3, and JavaScript
 - **File Uploads**: Receipt and document attachment support
-- **Data Visualization**: Interactive charts using Recharts
+- **Data Visualization**: Interactive charts using JavaScript libraries
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui
-- **Authentication**: NextAuth.js
-- **Charts**: Recharts
-- **Forms**: React Hook Form with Zod validation
-
 ### Backend
-- **Framework**: Spring Boot 3.2
-- **Language**: Java 17
-- **Database**: MySQL with Spring Data JPA
+- **Language**: Java 11+
+- **Web Framework**: Java Servlets and JSP
+- **Database**: MySQL 8.0+
+- **Database Access**: JDBC
 - **Build Tool**: Maven
-- **Architecture**: RESTful API with layered architecture
+- **Application Server**: Apache Tomcat 9+
 
-### Database & ORM
-- **Primary Database**: SQLite with Prisma (Development)
-- **Production Database**: MySQL (Configured)
-- **ORM**: Prisma Client for frontend, Spring Data JPA for backend
+### Frontend
+- **Markup**: HTML5
+- **Styling**: CSS3
+- **Scripting**: JavaScript (Vanilla/ES6+)
+- **Templates**: JSP (JavaServer Pages)
+
+### Database & Persistence
+- **Primary Database**: MySQL
+- **Data Access**: DAO (Data Access Object) pattern with JDBC
+- **Connection Management**: Database connection pooling
 
 ### Development Tools
 - **Version Control**: Git
-- **Package Manager**: npm
-- **Build Tool**: Turbopack (Next.js)
-- **Linting**: ESLint
-- **Testing**: Jest (planned)
+- **Build Tool**: Maven
+- **IDE**: Any Java IDE (Eclipse, IntelliJ IDEA, VS Code)
+- **Database Tool**: MySQL Workbench or similar
 
 ## 📋 Prerequisites
 
-### Frontend Development
-- Node.js 18+
-- npm or yarn
-
-### Backend Development
-- Java 17+
+### System Requirements
+- Java 11+ (JDK)
 - Maven 3.6+
-- MySQL 8.0+ (for production)
+- MySQL 8.0+
+- Apache Tomcat 9+
+- Git
+
+### Installation
+1. **Java JDK**: Download and install from [Oracle](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) or [OpenJDK](https://openjdk.java.net/)
+2. **Maven**: Download from [maven.apache.org](https://maven.apache.org/download.cgi)
+3. **MySQL**: Download from [mysql.com](https://dev.mysql.com/downloads/mysql/)
+4. **Apache Tomcat**: Download from [tomcat.apache.org](https://tomcat.apache.org/download-90.cgi)
 
 ## 🚀 Getting Started
 
-### Quick Start (Frontend Only)
+### Quick Start
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Raunaaaakkkkkk/Expense-Management-Tracker-.git
    cd expense-mgmt
    ```
 
-2. **Install dependencies**
-   ```bash
-   npm install
+2. **Set up MySQL database**
+   ```sql
+   CREATE DATABASE expense_mgmt;
+   -- Run the schema creation script from src/main/resources/schema.sql
    ```
 
-3. **Set up the database**
+3. **Configure database connection**
+   - Update database credentials in `src/main/java/com/expensemgmt/util/DatabaseConnection.java`
+   - Or configure via Tomcat context.xml
+
+4. **Build the application**
    ```bash
-   npx prisma db push
-   npm run db:seed
+   ./build.sh
+   ```
+   Or manually:
+   ```bash
+   mvn clean compile
+   mvn package
    ```
 
-4. **Start the development server**
+5. **Deploy to Tomcat**
+   - Copy `target/expense-management-tracker.war` to Tomcat's `webapps/` directory
+   - Or use Tomcat Manager to deploy the WAR file
+
+6. **Start Tomcat**
    ```bash
-   npm run dev
+   # Windows
+   startup.bat
+   
+   # Linux/Mac
+   startup.sh
    ```
 
-5. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-### Full Stack Development (Frontend + Backend)
-
-1. **Set up the backend**
-   ```bash
-   # Configure MySQL database in src/main/resources/application.properties
-   # Run the Spring Boot application
-   mvn spring-boot:run
-   ```
-
-2. **Set up the frontend** (follow steps 1-5 above)
-
-3. **Access the application**
-   - Frontend: [http://localhost:3000](http://localhost:3000)
-   - Backend API: [http://localhost:8080](http://localhost:8080)
+7. **Access the application**
+   Navigate to [http://localhost:8080/expense-management-tracker](http://localhost:8080/expense-management-tracker)
 
 ## 👤 Demo Accounts
 
-After running the database seed:
+After setting up the database with demo data:
 
 - **Admin**: `admin@demo.local` / `demo123`
 - **Manager**: `manager@demo.local` / `demo123`
@@ -123,70 +125,73 @@ After running the database seed:
 
 ```
 expense-mgmt/
-├── prisma/                        # Database schema and migrations
-│   ├── schema.prisma             # Prisma schema definition
-│   ├── seed.cjs                  # Database seeding script
-│   └── migrations/               # Database migrations
-├── public/                       # Static assets
-├── src/
-│   ├── app/                      # Next.js App Router pages
-│   │   ├── api/                  # API routes
-│   │   ├── dashboard/            # Dashboard page
-│   │   ├── expenses/             # Expense management pages
-│   │   ├── login/                # Authentication page
-│   │   ├── reports/              # Reports page
-│   │   ├── settings/             # Settings page
-│   │   └── teams/                # Team management page
-│   ├── components/               # Reusable React components
-│   ├── lib/                      # Utility functions and configurations
-│   ├── types/                    # TypeScript type definitions
-│   └── main/java/com/expensemgmt/  # Spring Boot backend
-│       ├── controller/           # REST controllers
-│       ├── model/                # JPA entities
-│       ├── repository/           # Data repositories
-│       ├── service/              # Business logic services
-│       └── ExpenseManagementApplication.java
-├── package.json                  # Frontend dependencies
-├── pom.xml                       # Backend Maven configuration
-├── tailwind.config.ts            # Tailwind CSS configuration
-├── next.config.ts                # Next.js configuration
+├── src/main/java/com/expensemgmt/     # Java source code
+│   ├── dao/                          # Data Access Objects
+│   ├── model/                        # Data models/entities
+│   ├── servlet/                      # Servlet controllers
+│   ├── service/                      # Business logic services
+│   └── util/                         # Utility classes
+├── src/main/webapp/                  # Web application resources
+│   ├── WEB-INF/                      # Protected resources
+│   │   ├── jsp/                      # JSP pages
+│   │   └── web.xml                   # Web application configuration
+│   ├── css/                          # Stylesheets
+│   ├── js/                           # JavaScript files
+│   └── index.jsp                     # Main entry point
+├── src/main/resources/               # Application resources
+│   ├── schema.sql                    # Database schema
+│   └── migrate_data.sql              # Data migration scripts
+├── target/                           # Build output (generated)
+├── pom.xml                           # Maven configuration
+├── build.sh                          # Build script
 └── README.md
 ```
 
 ## 🔧 Available Scripts
 
-### Frontend Scripts
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run prisma:generate` - Generate Prisma client
-- `npm run db:push` - Push schema changes to database
-- `npm run db:seed` - Seed database with demo data
+### Maven Commands
+- `mvn clean` - Clean build artifacts
+- `mvn compile` - Compile Java sources
+- `mvn test` - Run unit tests
+- `mvn package` - Build WAR file
+- `mvn clean package` - Full clean build
 
-### Backend Scripts
-- `mvn clean compile` - Compile the project
-- `mvn spring-boot:run` - Run Spring Boot application
-- `mvn clean package` - Build JAR file
-- `mvn clean test` - Run unit tests
+### Build Script
+- `./build.sh` - Automated build and deployment preparation
+
+### Tomcat Commands
+- `startup.sh/startup.bat` - Start Tomcat server
+- `shutdown.sh/shutdown.bat` - Stop Tomcat server
 
 ## 🌐 Deployment
 
-### Frontend Deployment
-```bash
-npm run build
-npm run start
-```
+### Tomcat Deployment
+1. **Build the WAR file**
+   ```bash
+   mvn clean package
+   ```
 
-### Backend Deployment
-```bash
-mvn clean package
-java -jar target/expense-management-0.0.1-SNAPSHOT.jar
-```
+2. **Deploy to Tomcat**
+   - Copy `target/expense-management-tracker.war` to `TOMCAT_HOME/webapps/`
+   - Or use Tomcat Web Application Manager
 
-### Docker Deployment (Planned)
-- Docker Compose configuration for full-stack deployment
-- Separate containers for frontend, backend, and database
+3. **Configure Database**
+   - Set up MySQL database
+   - Update connection settings in `DatabaseConnection.java` or `context.xml`
+
+4. **Start Tomcat**
+   ```bash
+   TOMCAT_HOME/bin/startup.sh
+   ```
+
+5. **Access Application**
+   - URL: `http://localhost:8080/expense-management-tracker`
+
+### Production Considerations
+- Configure connection pooling in Tomcat
+- Set up proper logging
+- Configure SSL/TLS
+- Set up backup strategies for database
 
 ## 🤝 Contributing
 
@@ -198,7 +203,7 @@ java -jar target/expense-management-0.0.1-SNAPSHOT.jar
 
 ## 📊 Database Schema
 
-The application uses SQLite (development) / MySQL (production) with the following main tables:
+The application uses MySQL with the following main tables:
 - `organization` - Organization/company information
 - `user` - User accounts and roles
 - `expense` - Expense records with status tracking
@@ -211,14 +216,16 @@ The application uses SQLite (development) / MySQL (production) with the followin
 
 ## 🔄 Migration Status
 
-This project is currently migrating from a legacy Java Servlet/JSP implementation to a modern full-stack architecture:
+This project is currently migrating from a Next.js-based implementation to a Java Servlet/JSP web application:
 
-- ✅ **Completed**: Next.js frontend with authentication and dashboard
-- ✅ **Completed**: Spring Boot backend with JPA entities
-- ✅ **Completed**: Prisma database schema and migrations
-- 🔄 **In Progress**: API integration between frontend and backend
-- 🔄 **In Progress**: Legacy servlet code migration
-- 📋 **Planned**: Comprehensive testing and deployment pipeline
+- ✅ **Completed**: Maven project structure setup
+- ✅ **Completed**: Database schema conversion to MySQL
+- ✅ **Completed**: JDBC utilities and DAO classes
+- ✅ **Completed**: Basic authentication servlet
+- 🔄 **In Progress**: Expense CRUD operations servlet
+- 🔄 **In Progress**: Dashboard and reporting JSP pages
+- 🔄 **In Progress**: Approval workflow implementation
+- 📋 **Planned**: Comprehensive testing and production deployment
 
 ## 📄 License
 
