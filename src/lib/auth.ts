@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth";
 import { compare } from "bcryptjs";
+import NextAuth from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   providers: [
@@ -51,12 +51,12 @@ export const authOptions: NextAuthOptions = {
       }
       // Refresh user data from database on update trigger or when any field is not set
       if (trigger === "update" || token.role === undefined || token.organizationId === undefined || token.canViewTeamPage === undefined || token.canViewApprovalPage === undefined || token.canManageTeamExpenses === undefined || token.canViewReports === undefined || token.canManagePolicies === undefined || token.canManageStores === undefined) {
-        const dbUser = await prisma.user.findUnique({ 
+        const dbUser = await prisma.user.findUnique({
           where: { id: token.sub },
-          select: { 
-            role: true, 
-            organizationId: true, 
-            canViewTeamPage: true, 
+          select: {
+            role: true,
+            organizationId: true,
+            canViewTeamPage: true,
             canViewApprovalPage: true,
             canManageTeamExpenses: true,
             canViewReports: true,
@@ -97,4 +97,4 @@ export const authOptions: NextAuthOptions = {
   },
   debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET,
-};
+});
