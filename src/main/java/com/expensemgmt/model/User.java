@@ -1,43 +1,29 @@
 package com.expensemgmt.model;
 
-import java.sql.Timestamp;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-/**
- * User model class
- */
+@Entity
+@Table(name = "users")
 public class User {
-    public enum Role {
-        ADMIN, MANAGER, EMPLOYEE, ACCOUNTANT
-    }
 
+    @Id
     private String id;
     private String email;
     private String name;
-    private String image;
     private String passwordHash;
     private Role role;
-    private boolean canViewTeamPage;
-    private boolean canViewApprovalPage;
-    private boolean canManageTeamExpenses;
-    private boolean canViewReports;
-    private boolean canManagePolicies;
-    private boolean canManageStores;
     private String organizationId;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
 
-    // Constructors
-    public User() {}
-
-    public User(String id, String email, String name, Role role, String organizationId) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.role = role;
-        this.organizationId = organizationId;
+    public enum Role {
+        EMPLOYEE,
+        MANAGER,
+        ADMIN
     }
 
-    // Getters and Setters
+    // Getters and setters
+
     public String getId() {
         return id;
     }
@@ -62,14 +48,6 @@ public class User {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getPasswordHash() {
         return passwordHash;
     }
@@ -86,86 +64,11 @@ public class User {
         this.role = role;
     }
 
-    public boolean isCanViewTeamPage() {
-        return canViewTeamPage;
-    }
-
-    public void setCanViewTeamPage(boolean canViewTeamPage) {
-        this.canViewTeamPage = canViewTeamPage;
-    }
-
-    public boolean isCanViewApprovalPage() {
-        return canViewApprovalPage;
-    }
-
-    public void setCanViewApprovalPage(boolean canViewApprovalPage) {
-        this.canViewApprovalPage = canViewApprovalPage;
-    }
-
-    public boolean isCanManageTeamExpenses() {
-        return canManageTeamExpenses;
-    }
-
-    public void setCanManageTeamExpenses(boolean canManageTeamExpenses) {
-        this.canManageTeamExpenses = canManageTeamExpenses;
-    }
-
-    public boolean isCanViewReports() {
-        return canViewReports;
-    }
-
-    public void setCanViewReports(boolean canViewReports) {
-        this.canViewReports = canViewReports;
-    }
-
-    public boolean isCanManagePolicies() {
-        return canManagePolicies;
-    }
-
-    public void setCanManagePolicies(boolean canManagePolicies) {
-        this.canManagePolicies = canManagePolicies;
-    }
-
-    public boolean isCanManageStores() {
-        return canManageStores;
-    }
-
-    public void setCanManageStores(boolean canManageStores) {
-        this.canManageStores = canManageStores;
-    }
-
     public String getOrganizationId() {
         return organizationId;
     }
 
     public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", role=" + role +
-                ", organizationId='" + organizationId + '\'' +
-                '}';
     }
 }

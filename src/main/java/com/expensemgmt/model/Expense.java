@@ -1,17 +1,16 @@
 package com.expensemgmt.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
-/**
- * Expense model class
- */
+@Entity
+@Table(name = "expenses")
 public class Expense {
-    public enum Status {
-        PENDING, APPROVED, REJECTED, REIMBURSED
-    }
 
+    @Id
     private String id;
     private String title;
     private BigDecimal amount;
@@ -19,37 +18,18 @@ public class Expense {
     private Date date;
     private String notes;
     private Status status;
-    private String receiptUrl;
-    private String approvedById;
-    private Timestamp approvedAt;
-    private String rejectedReason;
     private String userId;
     private String organizationId;
-    private String storeId;
     private String categoryId;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
 
-    // Additional fields for display purposes
-    private String userName;
-    private String categoryName;
-
-    // Constructors
-    public Expense() {}
-
-    public Expense(String id, String title, BigDecimal amount, String currency, Date date,
-                  Status status, String userId, String organizationId) {
-        this.id = id;
-        this.title = title;
-        this.amount = amount;
-        this.currency = currency;
-        this.date = date;
-        this.status = status;
-        this.userId = userId;
-        this.organizationId = organizationId;
+    public enum Status {
+        PENDING,
+        APPROVED,
+        REJECTED
     }
 
-    // Getters and Setters
+    // Getters and setters
+
     public String getId() {
         return id;
     }
@@ -106,38 +86,6 @@ public class Expense {
         this.status = status;
     }
 
-    public String getReceiptUrl() {
-        return receiptUrl;
-    }
-
-    public void setReceiptUrl(String receiptUrl) {
-        this.receiptUrl = receiptUrl;
-    }
-
-    public String getApprovedById() {
-        return approvedById;
-    }
-
-    public void setApprovedById(String approvedById) {
-        this.approvedById = approvedById;
-    }
-
-    public Timestamp getApprovedAt() {
-        return approvedAt;
-    }
-
-    public void setApprovedAt(Timestamp approvedAt) {
-        this.approvedAt = approvedAt;
-    }
-
-    public String getRejectedReason() {
-        return rejectedReason;
-    }
-
-    public void setRejectedReason(String rejectedReason) {
-        this.rejectedReason = rejectedReason;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -154,64 +102,11 @@ public class Expense {
         this.organizationId = organizationId;
     }
 
-    public String getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
-    }
-
     public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(String categoryId) {.
         this.categoryId = categoryId;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    @Override
-    public String toString() {
-        return "Expense{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", amount=" + amount +
-                ", currency='" + currency + '\'' +
-                ", status=" + status +
-                ", userId='" + userId + '\'' +
-                ", organizationId='" + organizationId + '\'' +
-                '}';
     }
 }
